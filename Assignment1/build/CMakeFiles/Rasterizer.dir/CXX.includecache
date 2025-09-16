@@ -6,9 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/home/cs18/Desktop/Assignments/Assignment1/Triangle.cpp
+/home/cs18/Desktop/GraphicsAssignment/Assignment1/Triangle.cpp
 Triangle.hpp
-/home/cs18/Desktop/Assignments/Assignment1/Triangle.hpp
+/home/cs18/Desktop/GraphicsAssignment/Assignment1/Triangle.hpp
 algorithm
 -
 array
@@ -16,15 +16,15 @@ array
 stdexcept
 -
 
-/home/cs18/Desktop/Assignments/Assignment1/Triangle.hpp
+/home/cs18/Desktop/GraphicsAssignment/Assignment1/Triangle.hpp
 eigen3/Eigen/Eigen
 -
 
-/home/cs18/Desktop/Assignments/Assignment1/main.cpp
+/home/cs18/Desktop/GraphicsAssignment/Assignment1/main.cpp
 Triangle.hpp
-/home/cs18/Desktop/Assignments/Assignment1/Triangle.hpp
+/home/cs18/Desktop/GraphicsAssignment/Assignment1/Triangle.hpp
 rasterizer.hpp
-/home/cs18/Desktop/Assignments/Assignment1/rasterizer.hpp
+/home/cs18/Desktop/GraphicsAssignment/Assignment1/rasterizer.hpp
 eigen3/Eigen/Eigen
 -
 iostream
@@ -32,11 +32,11 @@ iostream
 opencv2/opencv.hpp
 -
 
-/home/cs18/Desktop/Assignments/Assignment1/rasterizer.cpp
+/home/cs18/Desktop/GraphicsAssignment/Assignment1/rasterizer.cpp
 algorithm
 -
 rasterizer.hpp
-/home/cs18/Desktop/Assignments/Assignment1/rasterizer.hpp
+/home/cs18/Desktop/GraphicsAssignment/Assignment1/rasterizer.hpp
 opencv2/opencv.hpp
 -
 math.h
@@ -44,9 +44,9 @@ math.h
 stdexcept
 -
 
-/home/cs18/Desktop/Assignments/Assignment1/rasterizer.hpp
+/home/cs18/Desktop/GraphicsAssignment/Assignment1/rasterizer.hpp
 Triangle.hpp
-/home/cs18/Desktop/Assignments/Assignment1/Triangle.hpp
+/home/cs18/Desktop/GraphicsAssignment/Assignment1/Triangle.hpp
 algorithm
 -
 eigen3/Eigen/Eigen
