@@ -58,7 +58,7 @@ static bool insideTriangle(int x, int y, const Vector3f* _v)
     float cross2p = v20.x() * vp2.y() - v20.y() * vp2.x();
 
     return cross0p > 0 && cross1p > 0 && cross2p > 0
-            ||cross0p < 0 && cross1p < 0 && cross2p < 0;
+            ||cross0p < 0 && cross1p < 0 && cross2p< 0;
 }
 
 static std::tuple<float, float, float> computeBarycentric2D(float x, float y, const Vector3f* v)
@@ -134,11 +134,35 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
     MinY = std::floor(MinY);
     MaxY = std::ceil(MaxY);
     
+    // std::vector<Vector2f> SampleOffsets =
+    // {
+    //     {0.5f,0.5f}
+    // };
+    std::vector<Vector2f> SampleOffsets =
+    {
+        {0.25f,0.25f},{0.25f,0.75f},{0.75f,0.25f},{0.75f,0.75f}
+    };
+    // std::vector<Vector2f> SampleOffsets =
+    // {
+    //     {0.125f,0.125f},{0.125f,0.375f},{0.125f,0.625f},{0.125f,0.875f},
+    //     {0.375f,0.125f},{0.375f,0.375f},{0.375f,0.625f},{0.375f,0.875f},
+    //     {0.625f,0.125f},{0.625f,0.375f},{0.625f,0.625f},{0.625f,0.875f},
+    //     {0.875f,0.125f},{0.875f,0.375f},{0.875f,0.625f},{0.875f,0.875f},
+    // };
     for(int x = MinX; x <= MaxX; ++x)
     {
         for(int y = MinY; y <= MaxY; ++y)
         {
-            if(insideTriangle(x + 0.5f,y + 0.5f, t.v))
+
+            float coverage = 0.f;
+            for(const auto& offset : SampleOffsets)
+            {
+                if(insideTriangle(x + offset.x(),y + offset.y(), t.v))
+                {
+                    coverage += 1.0f / SampleOffsets.size();
+                }
+            }
+            if(coverage > 0.f)
             {
                 auto[alpha, beta, gamma] = computeBarycentric2D(x, y, t.v);
                 float w_reciprocal = 1.0/(alpha / v[0].w() + beta / v[1].w() + gamma / v[2].w());
@@ -151,7 +175,13 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
 
                     Vector3f point;
                     point << x, y ,z_interpolated;
-                    set_pixel(point, t.getColor());
+                    
+                    // set_pixel(point, t.getColor());
+                    set_pixel(point, t.getColor() * coverage);
+                    if(coverage < 1.f)
+                    {
+                        std::cout<< "index: " << get_index(x, y)  << ",ratio: " << coverage << '\n';
+                    }
                 }
 
             }
