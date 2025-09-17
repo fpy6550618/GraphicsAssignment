@@ -63,9 +63,20 @@ static bool insideTriangle(int x, int y, const Vector3f* _v)
 
 static std::tuple<float, float, float> computeBarycentric2D(float x, float y, const Vector3f* v)
 {
-    float c1 = (x*(v[1].y() - v[2].y()) + (v[2].x() - v[1].x())*y + v[1].x()*v[2].y() - v[2].x()*v[1].y()) / (v[0].x()*(v[1].y() - v[2].y()) + (v[2].x() - v[1].x())*v[0].y() + v[1].x()*v[2].y() - v[2].x()*v[1].y());
-    float c2 = (x*(v[2].y() - v[0].y()) + (v[0].x() - v[2].x())*y + v[2].x()*v[0].y() - v[0].x()*v[2].y()) / (v[1].x()*(v[2].y() - v[0].y()) + (v[0].x() - v[2].x())*v[1].y() + v[2].x()*v[0].y() - v[0].x()*v[2].y());
-    float c3 = (x*(v[0].y() - v[1].y()) + (v[1].x() - v[0].x())*y + v[0].x()*v[1].y() - v[1].x()*v[0].y()) / (v[2].x()*(v[0].y() - v[1].y()) + (v[1].x() - v[0].x())*v[2].y() + v[0].x()*v[1].y() - v[1].x()*v[0].y());
+    //a = (-(x - x_b) * (y_c - y_b) + (y - y_b) * (x_c - x_b)) / (-(x_a - x_b) * (y_c - y_b) + (y_a - y_b))
+    float Ax = v[0].x();
+    float Ay = v[0].y();
+    float Bx = v[1].x();
+    float By = v[1].y();
+    float Cx = v[2].x();
+    float Cy = v[2].y();
+    float DS = Ax * (By - Cy) + Bx * (Cy - Ay) + Cx * (Ay - By);
+    // float c1 = (x*(By - Cy) + (Cx - Bx)*y + Bx*Cy - Cx*By) / (Ax*(By - Cy) + (Cx - Bx)*Ay + Bx*Cy - Cx*By);
+    // float c2 = (x*(Cy - Ay) + (Ax - Cx)*y + Cx*Ay - Ax*Cy) / (Bx*(Cy - Ay) + (Ax - Cx)*By + Cx*Ay - Ax*Cy);
+    // float c3 = (x*(Ay - By) + (Bx - Ax)*y + Ax*By - Bx*Ay) / (Cx*(Ay - By) + (Bx - Ax)*Cy + Ax*By - Bx*Ay);
+    float c1 = (x * (By - Cy) + Bx * (Cy - y) + Cx * (y - By)) / DS;
+    float c2 = (Ax * (y - Cy) + x * (Cy - Ay) + Cx * (Ay - y)) / DS;
+    float c3 = (Ax * (By - y) + Bx * (y - Ay) + x * (Ay - By)) / DS;
     return {c1,c2,c3};
 }
 
