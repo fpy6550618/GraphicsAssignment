@@ -61,22 +61,28 @@ static bool insideTriangle(int x, int y, const Vector3f* _v)
             ||cross0p < 0 && cross1p < 0 && cross2p< 0;
 }
 
-static std::tuple<float, float, float> computeBarycentric2D(float x, float y, const Vector3f* v)
+static float ComputeTriangleArea2D(const Vector3f* v)
 {
-    //a = (-(x - x_b) * (y_c - y_b) + (y - y_b) * (x_c - x_b)) / (-(x_a - x_b) * (y_c - y_b) + (y_a - y_b))
     float Ax = v[0].x();
     float Ay = v[0].y();
     float Bx = v[1].x();
     float By = v[1].y();
     float Cx = v[2].x();
     float Cy = v[2].y();
-    float DS = Ax * (By - Cy) + Bx * (Cy - Ay) + Cx * (Ay - By);
-    // float c1 = (x*(By - Cy) + (Cx - Bx)*y + Bx*Cy - Cx*By) / (Ax*(By - Cy) + (Cx - Bx)*Ay + Bx*Cy - Cx*By);
-    // float c2 = (x*(Cy - Ay) + (Ax - Cx)*y + Cx*Ay - Ax*Cy) / (Bx*(Cy - Ay) + (Ax - Cx)*By + Cx*Ay - Ax*Cy);
-    // float c3 = (x*(Ay - By) + (Bx - Ax)*y + Ax*By - Bx*Ay) / (Cx*(Ay - By) + (Bx - Ax)*Cy + Ax*By - Bx*Ay);
-    float c1 = (x * (By - Cy) + Bx * (Cy - y) + Cx * (y - By)) / DS;
-    float c2 = (Ax * (y - Cy) + x * (Cy - Ay) + Cx * (Ay - y)) / DS;
-    float c3 = (Ax * (By - y) + Bx * (y - Ay) + x * (Ay - By)) / DS;
+    return (Ax * (By - Cy) + Bx * (Cy - Ay) + Cx * (Ay - By)) / 2;
+}
+
+static std::tuple<float, float, float> computeBarycentric2D(float x, float y, const Vector3f* v)
+{
+    float S = ComputeTriangleArea2D(v);
+
+    Vector3f v1[3] = {{x , y , 0.f}, v[1], v[2]};
+    float c1 = ComputeTriangleArea2D(v1) / S;
+    Vector3f v2[3] = {v[0], {x , y , 0.f}, v[2]};
+    float c2 = ComputeTriangleArea2D(v2) / S;
+    Vector3f v3[3] = {v[0], v[1], {x , y , 0.f}};
+    float c3 = ComputeTriangleArea2D(v3) / S;
+
     return {c1,c2,c3};
 }
 
