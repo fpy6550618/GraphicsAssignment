@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/cs18/Desktop/GraphicsAssignment/Assignment2
+CMAKE_SOURCE_DIR = /home/cs18/Desktop/GraphicsAssignment/Assignment3
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/cs18/Desktop/GraphicsAssignment/Assignment2/build
+CMAKE_BINARY_DIR = /home/cs18/Desktop/GraphicsAssignment/Assignment3/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/cs18/Desktop/GraphicsAssignment/Assignment2/build/CMakeFiles /home/cs18/Desktop/GraphicsAssignment/Assignment2/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cs18/Desktop/GraphicsAssignment/Assignment3/build/CMakeFiles /home/cs18/Desktop/GraphicsAssignment/Assignment3/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/cs18/Desktop/GraphicsAssignment/Assignment2/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/cs18/Desktop/GraphicsAssignment/Assignment3/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -122,6 +122,33 @@ Rasterizer: cmake_check_build_system
 Rasterizer/fast:
 	$(MAKE) -f CMakeFiles/Rasterizer.dir/build.make CMakeFiles/Rasterizer.dir/build
 .PHONY : Rasterizer/fast
+
+Texture.o: Texture.cpp.o
+
+.PHONY : Texture.o
+
+# target to build an object file
+Texture.cpp.o:
+	$(MAKE) -f CMakeFiles/Rasterizer.dir/build.make CMakeFiles/Rasterizer.dir/Texture.cpp.o
+.PHONY : Texture.cpp.o
+
+Texture.i: Texture.cpp.i
+
+.PHONY : Texture.i
+
+# target to preprocess a source file
+Texture.cpp.i:
+	$(MAKE) -f CMakeFiles/Rasterizer.dir/build.make CMakeFiles/Rasterizer.dir/Texture.cpp.i
+.PHONY : Texture.cpp.i
+
+Texture.s: Texture.cpp.s
+
+.PHONY : Texture.s
+
+# target to generate assembly for a file
+Texture.cpp.s:
+	$(MAKE) -f CMakeFiles/Rasterizer.dir/build.make CMakeFiles/Rasterizer.dir/Texture.cpp.s
+.PHONY : Texture.cpp.s
 
 Triangle.o: Triangle.cpp.o
 
@@ -213,6 +240,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... Rasterizer"
+	@echo "... Texture.o"
+	@echo "... Texture.i"
+	@echo "... Texture.s"
 	@echo "... Triangle.o"
 	@echo "... Triangle.i"
 	@echo "... Triangle.s"

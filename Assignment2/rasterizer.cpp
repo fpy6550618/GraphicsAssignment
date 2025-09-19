@@ -75,14 +75,12 @@ static float ComputeTriangleArea2D(const Vector3f* v)
 static std::tuple<float, float, float> computeBarycentric2D(float x, float y, const Vector3f* v)
 {
     float S = ComputeTriangleArea2D(v);
-
     Vector3f v1[3] = {{x , y , 0.f}, v[1], v[2]};
     float c1 = ComputeTriangleArea2D(v1) / S;
     Vector3f v2[3] = {v[0], {x , y , 0.f}, v[2]};
     float c2 = ComputeTriangleArea2D(v2) / S;
     Vector3f v3[3] = {v[0], v[1], {x , y , 0.f}};
     float c3 = ComputeTriangleArea2D(v3) / S;
-
     return {c1,c2,c3};
 }
 
