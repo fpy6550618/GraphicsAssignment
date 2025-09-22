@@ -11,34 +11,36 @@ bool rayTriangleIntersect(const Vector3f& v0, const Vector3f& v1, const Vector3f
     // TODO: Implement this function that tests whether the triangle
     // that's specified bt v0, v1 and v2 intersects with the ray (whose
     // origin is *orig* and direction is *dir*)
-    // Also don't forget to update tnear, u and v.
-    const float EPSILON = 0.00001f;
-    Vector3f E1 = v1 - v0;
-    Vector3f E2 = v2 - v0;
-    Vector3f S = orig - v0;
-    Vector3f S1 = crossProduct(dir, E2);
-    Vector3f S2 = crossProduct(S, E1);
-
-    float divisor = dotProduct(S1, E1);
-    if(fabs(divisor < EPSILON))
-    {
+    // Also don't forget to update tnear, u and v.    // 计算边向量
+    Vector3f edge1 = v1 - v0;
+    Vector3f edge2 = v2 - v0;
+    Vector3f h = crossProduct(dir, edge2);
+    float a = dotProduct(edge1, h);
+    
+    // 如果 a 接近 0，光线与三角形平行或共面
+    if (a > -1e-6f && a < 1e-6f)
         return false;
-    }
-    float inDivisor = 1.0f / divisor;
-    float t = dotProduct(S2, E2) * inDivisor;
-    float b1 = dotProduct(S1, S) * inDivisor;
-    float b2 = dotProduct(S2, dir) * inDivisor;
-
-    if(t >= 0 && b1 >= -EPSILON && b2 >= -EPSILON && (1 - b1 - b2) > -EPSILON)
-    {
-        tnear = t;
-        u = b1;
-        v = b2;
-        return true;
-    }
-
- 
-    return false;
+    
+    float f = 1.0f / a;
+    Vector3f s = orig - v0;
+    u = f * dotProduct(s, h);
+    
+    // u 不在 [0, 1] 范围内，无交点
+    if (u < 0.0f || u > 1.0f)
+        return false;
+    
+    Vector3f q = crossProduct(s, edge1);
+    v = f * dotProduct(dir, q);
+    
+    // v 不在 [0, 1-u] 范围内，无交点
+    if (v < 0.0f || u + v > 1.0f)
+        return false;
+    
+    // 计算光线参数 t
+    tnear = f * dotProduct(edge2, q);
+    
+    // t 必须为正（光线沿正方向传播）
+    return tnear > 1e-6f;
 }
 
 class MeshTriangle : public Object
