@@ -433,8 +433,12 @@ namespace objl
 
             std::ifstream file(Path);
 
+            printf("\rLoader: \n Path: %s \n", Path.c_str());
             if (!file.is_open())
+            {
+                printf("\r Open Failed: \n\n");
                 return false;
+            }
 
             LoadedMeshes.clear();
             LoadedVertices.clear();

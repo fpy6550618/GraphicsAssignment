@@ -96,7 +96,58 @@ inline bool Bounds3::IntersectP(const Ray& ray, const Vector3f& invDir,
     // invDir: ray direction(x,y,z), invDir=(1.0/x,1.0/y,1.0/z), use this because Multiply is faster that Division
     // dirIsNeg: ray direction(x,y,z), dirIsNeg=[int(x>0),int(y>0),int(z>0)], use this to simplify your logic
     // TODO test if ray bound intersects
-    
+    // float tMin = (pMin.x - ray.origin.x) * invDir.x;
+    // float tMax = (pMax.x - ray.origin.x) * invDir.x;    
+    // if(!dirIsNeg[0])
+    // {
+    //     std::swap(tMin, tMax);        
+    // }
+
+    // float tyMin = (pMin.y - ray.origin.y) * invDir.y;
+    // float tyMax = (pMax.y - ray.origin.y) * invDir.y;
+    // if(!dirIsNeg[1])
+    // {
+    //     std::swap(tyMin, tyMax);        
+    // }
+
+    // if(tMin > tyMax || tyMin > tMax)
+    // {
+    //     return false;
+    // }
+    // tMin = std::max(tMin, tyMin);
+    // tMax = std::min(tMax, tyMax);
+
+    // float tzMin = (pMin.z - ray.origin.z) * invDir.z;
+    // float tzMax = (pMax.z - ray.origin.z) * invDir.z;
+    // if(!dirIsNeg[2])
+    // {
+    //     std::swap(tzMin, tzMax);        
+    // }
+
+    // if(tMin > tzMax || tzMin > tMax)
+    // {
+    //     return false;
+    // }
+    // tMin = std::max(tMin, tzMin);
+    // tMax = std::min(tMax, tzMax);
+
+    // return tMin < ray.t_max && tMax > ray.t_min;
+    // 计算光线与各轴最小、最大平面的交点参数 t
+    Vector3f tMin = (pMin - ray.origin) * invDir;
+    Vector3f tMax = (pMax - ray.origin) * invDir;
+
+    // 根据方向符号调整 tMin 和 tMax，确保 tMin < tMax
+    if (!dirIsNeg[0]) std::swap(tMin.x, tMax.x); // 如果x方向为负，交换
+    if (!dirIsNeg[1]) std::swap(tMin.y, tMax.y); // 如果y方向为负，交换
+    if (!dirIsNeg[2]) std::swap(tMin.z, tMax.z); // 如果z方向为负，交换
+
+    // 计算整体进入时间（最晚的进入时间）和整体离开时间（最早的离开时间）
+    float tEnter = std::max(tMin.x, std::max(tMin.y, tMin.z));
+    float tExit = std::min(tMax.x, std::min(tMax.y, tMax.z));
+
+    // 判断是否相交：进入时间小于离开时间，且离开时间非负（光线向前传播）
+    return (tEnter <= tExit) && (tExit >= 0);
+
 }
 
 inline Bounds3 Union(const Bounds3& b1, const Bounds3& b2)

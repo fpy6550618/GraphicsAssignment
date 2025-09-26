@@ -80,6 +80,9 @@ public:
         objl::Loader loader;
         loader.LoadFile(filename);
 
+        int size = loader.LoadedMeshes.size();
+        printf("\rMeshTriangle: \n Size: %i \n\n", size);
+
         assert(loader.LoadedMeshes.size() == 1);
         auto mesh = loader.LoadedMeshes[0];
 
@@ -123,6 +126,10 @@ public:
         for (auto& tri : triangles)
             ptrs.push_back(&tri);
 
+
+        printf(" - MeshTriangle Generating BVH...\n\n");
+        int prtssize = ptrs.size();
+        printf(" ptrs size:%i \n\n",prtssize);
         bvh = new BVHAccel(ptrs);
     }
 
@@ -223,18 +230,27 @@ inline Intersection Triangle::getIntersection(Ray ray)
     double det_inv = 1. / det;
     Vector3f tvec = ray.origin - v0;
     u = dotProduct(tvec, pvec) * det_inv;
+
     if (u < 0 || u > 1)
-        return inter;
+        return inter; 
+
     Vector3f qvec = crossProduct(tvec, e1);
     v = dotProduct(ray.direction, qvec) * det_inv;
     if (v < 0 || u + v > 1)
         return inter;
+
     t_tmp = dotProduct(e2, qvec) * det_inv;
 
-    // TODO find ray triangle intersection
+    if(t_tmp < EPSILON) 
+        return inter;
 
-
-
+    // TODO find ray triangle intersection  
+    inter.happened = true;
+    inter.coords = ray.origin + ray.direction * t_tmp;
+    inter.normal = normal;
+    inter.distance = t_tmp;
+    inter.obj = this;
+    inter.m = m;
 
     return inter;
 }
